@@ -131,11 +131,5 @@ RUN \
     chmod 644 /etc/room/playchain.config.template.ini && \
     chmod 644 /etc/room/poker_room.config.template.ini
 
-ADD docker/roomentry.sh /usr/local/bin/roomentry.sh
-ADD docker/roomentry.py /usr/local/bin/roomentry.py
-RUN \
-    chmod a+x /usr/local/bin/roomentry.sh && \
-    chmod a+x /usr/local/bin/roomentry.py
-
 # default execute entry
-CMD ["/bin/bash", "/usr/local/bin/roomentry.sh"]
+CMD ["/bin/bash -c", "echo BASE FOR Dockerfile.final"]

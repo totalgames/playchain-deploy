@@ -151,7 +151,7 @@ run_node()
     echo "* Run node"
     docker run --log-driver syslog -v ${_WORK_DIR}:/var/lib/room ${_ARGS} -d \
                 ${_ENVS} \
-                --rm --name ${DOCKER_IMAGE_NAME}.d ${DOCKER_IMAGE_NAME}
+                --name ${DOCKER_IMAGE_NAME}.d ${DOCKER_IMAGE_NAME}
     exit 0
 }
 
@@ -239,7 +239,7 @@ main()
     if [[ $CURRENT_CHECK_SUM != $CHECK_SUM || \
      ! -e ${_WORK_DIR}/playchain.config.ini || \
      ! -e ${_WORK_DIR}/poker_room.config.ini ]]; then
-        ${SUDO} rm -rf ${_WORK_DIR}/blockchain
+        # ${SUDO} rm -rf ${_WORK_DIR}/blockchain
         docker stop ${DOCKER_IMAGE_NAME} 2>/dev/null
         docker rm ${DOCKER_IMAGE_NAME} 2>/dev/null
         docker rmi ${DOCKER_IMAGE_NAME} 2>/dev/null

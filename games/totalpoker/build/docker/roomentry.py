@@ -134,7 +134,7 @@ class APP(object):
         self.echo_debug("terminated")
         if self.playchain_rpc_pid:
             os.kill(self.playchain_rpc_pid, signal.SIGTERM)
-            shutil.rmtree(p.abspath(p.join(self.CONFIG_PATH, "blockchain")), ignore_errors=True)
+            # shutil.rmtree(p.abspath(p.join(self.CONFIG_PATH, "blockchain")), ignore_errors=True)
     
     def get_bool_environ(self, env_name: str):
         r = os.environ.get(env_name)
@@ -449,7 +449,7 @@ class APP(object):
                     ln = re.sub(r'\$\{INTERFACE_API\}', self.PLAYCHAIN_DATABASE_API_INTERFACE, ln)
                     ln = re.sub(r'\$\{PORT_API\}', str(self.PLAYCHAIN_DATABASE_API_PORT), ln)
                     ln = re.sub(r'\$\{PLAYCHAIN_P2P_URL\}', str(self.EXTERNAL_PLAYCHAIN_DATABASE_P2P_URL), ln)
-                    ln = re.sub(r'\$\{LOG_APPENDERS\}', "stderr default", ln)
+                    ln = re.sub(r'\$\{LOG_APPENDERS\}', "default", ln)
                     f.write(ln)
         except Exception as e:
             self.echo_debug("{}".format(e))
@@ -467,6 +467,7 @@ class APP(object):
                     ln = re.sub(r'\$\{PORT_API\}', str(self.PLAYCHAIN_DATABASE_API_PORT), ln)
                     ln = re.sub(r'\$\{PLAYCHAIN_P2P_URL\}', str(self.EXTERNAL_PLAYCHAIN_DATABASE_P2P_URL), ln)
                     ln = re.sub(r'\$\{LOG_APPENDERS\}', "default", ln)
+                    # ln = re.sub(r'\$\{LOG_APPENDERS\}', "stderr default", ln)
                     f.write(ln)
         except Exception as e:
             self.echo_debug("{}".format(e))
@@ -499,7 +500,7 @@ class APP(object):
             bar.update(0)
             time.sleep(1.2)
             self.echo_debug("Run {}".format(args))
-            playchain_rpc_proc = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.DEVNULL)
+            playchain_rpc_proc = subprocess.Popen(args, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
             self.playchain_rpc_pid = playchain_rpc_proc.pid
             self.echo_debug("Started subprocess {} pid = {}".format(args[0], self.playchain_rpc_pid))
             while synch_blocks < total_blocks:
@@ -579,6 +580,7 @@ class APP(object):
     def login(self):
         self.echo_progress("Login")
         (name, wif_key) = self.get_login_data_from_config()
+        self.echo_debug("Loaded name = {}, wif = {}".format(name, wif_key))
         if name and wif_key:
             (pub_key, wif_key) = self.get_private_key(name, wif = wif_key)
             if not self.check_account(name, pub_key):
@@ -653,7 +655,7 @@ class APP(object):
     def config_room_url(self):
         while(True):
             while(True):
-                poker_room_address = click.prompt('Enter server domain name on which you will serve your players', 
+                poker_room_address = click.prompt('Enter server domain name on which you will serve your players (e.g.: myserver.org)', 
                                                    type=str)  
                 if not self.check_domain_name(poker_room_address):
                     self.echo_error("'{}' is unreachable".format(poker_room_address))

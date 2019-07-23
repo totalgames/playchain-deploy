@@ -157,7 +157,7 @@ main()
 
     if [[ $CURRENT_CHECK_SUM != $CHECK_SUM || \
      ! -e ${_WORK_DIR}/playchain.config.ini ]]; then
-        ${SUDO} rm -rf ${_WORK_DIR}/blockchain
+        # ${SUDO} rm -rf ${_WORK_DIR}/blockchain
         ${SUDO} docker stop ${DOCKER_IMAGE_NAME} 2>/dev/null
         ${SUDO} docker rm ${DOCKER_IMAGE_NAME} 2>/dev/null
         ${SUDO} docker rmi ${DOCKER_IMAGE_NAME} 2>/dev/null

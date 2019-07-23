@@ -64,24 +64,43 @@ echo "PWD is $PWD"
 
 echo "* Docker image creating"
 
+DOCKER_FILE=Dockerfile
+DOCKER_BASE_IMAGE_NAME=${DOCKER_IMAGE_NAME}
+if [[ $TEST_TAG =~ base|final ]]; then
+    if [[ $TEST_TAG =~ base ]]; then
+        DOCKER_BASE_IMAGE_NAME=baseroom
+    fi
+    DOCKER_FILE=${DOCKER_FILE}.$TEST_TAG
+fi
+
+echo "DOCKER_FILE is $DOCKER_FILE"
+echo "DOCKER_BASE_IMAGE_NAME is $DOCKER_BASE_IMAGE_NAME"
+
 BUILD_OUTPUT_NAME=${DOCKER_IMAGE_NAME}.bsx
 if [[ $CONFIG_FILE =~ testnet.*$ ]]; then
-    docker build -t ${DOCKER_IMAGE_NAME} \
+    docker build -t ${DOCKER_BASE_IMAGE_NAME} \
     --build-arg PLAYCHAIN_SRC_DIR=${SRC_DIR_FOR_PLAYCHAN} \
     --build-arg POKER_ROOM_SRC_DIR=${SRC_DIR_FOR_POKER_ROOM} \
     --build-arg LIVE_TESTNET=ON \
-    -f Dockerfile  .
+    -f ${DOCKER_FILE}  .
     BUILD_OUTPUT_NAME=${DOCKER_IMAGE_NAME}.testnet.bsx
 else
-    docker build -t ${DOCKER_IMAGE_NAME} \
+    docker build -t ${DOCKER_BASE_IMAGE_NAME} \
     --build-arg PLAYCHAIN_SRC_DIR=${SRC_DIR_FOR_PLAYCHAN} \
     --build-arg POKER_ROOM_SRC_DIR=${SRC_DIR_FOR_POKER_ROOM} \
-    -f Dockerfile .
+    -f ${DOCKER_FILE} .
 fi
 
 if [ $? -ne 0 ]; then
     echo "BUILD ERROR"
     exit 1
+fi
+
+if [[ $TEST_TAG =~ base ]]; then
+    echo "Base image created"
+    exit 0
+elif [[ $TEST_TAG =~ final ]]; then
+    TEST_TAG=
 fi
 
 PAYLOAD_DIR=${TEMP_DIR}/_payload
