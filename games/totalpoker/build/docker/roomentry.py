@@ -784,7 +784,7 @@ class APP(object):
             while True:
                 ln_stderr = str(proc.stderr.readline(), 'utf-8').rstrip()
                 if any(ln_stderr):
-                    #self.echo_debug(ln_stderr)
+                    self.echo_debug("STDERR >> {}".format(ln_stderr))
                     ln_r = re.search('^progress length = (\d+?)$', ln_stderr)
                     if ln_r:
                         bar.length = int(ln_r.group(1))
@@ -802,7 +802,7 @@ class APP(object):
             while True:
                 ln_stdout = str(proc.stdout.readline(), 'utf-8').rstrip()
                 if any(ln_stdout):
-                    #self.echo_debug(ln_stdout)
+                    self.echo_debug("STDOUT >> {}".format(ln_stdout))
                     if re.search('^table\-id\s+=\s+', ln_stdout):
                         self.PLAYCHAIN_TABLES.append(ln_stdout)
                 else:
