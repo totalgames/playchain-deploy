@@ -167,6 +167,14 @@ download_node() {
     ./gdrive -c ${TARGET_DIR} download -f --stdout ${SETUP_GAME_FILE_ID[$1]} > ${TARGET_DIR}/setup.bsx
 }
 
+stop_node() {
+    print_debug "stop_node"
+
+    if [ -f ${TARGET_DIR}/stop.sh ]; then
+        cd ${TARGET_DIR} && ./stop.sh
+    fi    
+}
+
 start_node() {
     print_debug "start_node"
 
@@ -185,15 +193,10 @@ start_node() {
 
     print_debug "start ${RUN_IMAGE}"
 
+    stop_node
     chmod ugo+x ${RUN_IMAGE}
     ${RUN_IMAGE} ${TARGET_DIR}
     START_NODE_RESULT=$?
-}
-
-stop_node() {
-    print_debug "stop_node"
-    
-    cd ${TARGET_DIR} && ./stop.sh
 }
 
 uninstall_node() {

@@ -725,8 +725,9 @@ class APP(object):
         args.append(self.POKER_ROOM_URL);
         args.append("--room-name");
         args.append(self.ROOM_NAME);
-        args.append("--test-tag");
-        args.append(self.TEST_TAG);
+        if self.TEST_TAG and any(self.TEST_TAG):
+            args.append("--test-tag");
+            args.append(self.TEST_TAG);
         args.append("--playchain-url");
         args.append("ws://{}".format(self.get_rpc_api_url()));
         args.append("--playchain-id");
@@ -779,32 +780,26 @@ class APP(object):
             bar.update(0)
             time.sleep(1.2)
             self.echo_debug("Run {}".format(args))
-            proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             self.echo_debug("Started subprocess {} pid = {}".format(args[0], proc.pid))
             while True:
-                ln_stderr = str(proc.stderr.readline(), 'utf-8').rstrip()
-                if any(ln_stderr):
-                    self.echo_debug("STDERR >> {}".format(ln_stderr))
-                    ln_r = re.search('^progress length = (\d+?)$', ln_stderr)
+                ln_std = str(proc.stdout.readline(), 'utf-8').rstrip()
+                if any(ln_std):
+                    self.echo_debug("STD >> {}".format(ln_std))
+                    ln_r = re.search('^progress length = (\d+?)$', ln_std)
                     if ln_r:
                         bar.length = int(ln_r.group(1))
                         if bar.length < 1:
                             break
                     else:
-                        ln_r = re.search('^progress pos = (\d+?)$', ln_stderr)
+                        ln_r = re.search('^progress pos = (\d+?)$', ln_std)
                         if ln_r:
                             bar_pos = int(ln_r.group(1))
                             if bar_pos  > 0 and bar_pos  < bar.length: 
                                 bar.pos = bar_pos
                                 bar.update(0)
-                else:
-                    break
-            while True:
-                ln_stdout = str(proc.stdout.readline(), 'utf-8').rstrip()
-                if any(ln_stdout):
-                    self.echo_debug("STDOUT >> {}".format(ln_stdout))
-                    if re.search('^table\-id\s+=\s+', ln_stdout):
-                        self.PLAYCHAIN_TABLES.append(ln_stdout)
+                        elif re.search('^table\-id\s+=\s+', ln_std):
+                            self.PLAYCHAIN_TABLES.append(ln_std)
                 else:
                     break
             bar.pos = bar.length
