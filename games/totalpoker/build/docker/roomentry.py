@@ -789,8 +789,6 @@ class APP(object):
                     ln_r = re.search('^progress length = (\d+?)$', ln_std)
                     if ln_r:
                         bar.length = int(ln_r.group(1))
-                        if bar.length < 1:
-                            break
                     else:
                         ln_r = re.search('^progress pos = (\d+?)$', ln_std)
                         if ln_r:
