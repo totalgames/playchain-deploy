@@ -47,5 +47,5 @@ PYTHON_BIN=$(which python3)
 ROOMENTRY_BIN="/usr/local/bin/roomentry.py"
 
 ulimit -c unlimited
-
+chown ${USER}:${USER} -R ${HOME}
 exec chpst -u ${USER} -e ${ENV_EXPORT_DIR} ${PYTHON_BIN} ${ROOMENTRY_BIN}
