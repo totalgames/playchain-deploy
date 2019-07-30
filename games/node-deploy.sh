@@ -122,8 +122,10 @@ init_system_install() {
 
 install_debian_build_dependencies() {
     $SUDO apt-get update
-    $SUDO apt-get install -y \
-        wget realpath
+    $SUDO apt-get install -y wget
+    if [ -z `which realpath` ]; then
+        $SUDO apt-get install -y realpath
+    fi
 }
 
 install_build_dependencies() {
@@ -175,7 +177,7 @@ stop_node() {
 }
 
 start_node() {
-    print_debug "start_node"
+    print_debug "start_node $@"
 
     local RUN_IMAGE=${TARGET_DIR}/setup.bsx
 
@@ -184,7 +186,7 @@ start_node() {
     fi
 
     if [ ! -f ${RUN_IMAGE} ]; then
-        rint_error "Installation failed"
+        print_error "Installation failed"
         exit 1
     fi
 
@@ -320,7 +322,7 @@ else
         create_target_dir
         install_build_dependencies
 
-        if [ -f ${IMAGE_PATH} ]; then
+        if [[ -f "${IMAGE_PATH}" ]]; then
             start_node ${IMAGE_PATH}
         else
             download_node $GAME_INDEX

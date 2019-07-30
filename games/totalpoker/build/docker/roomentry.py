@@ -283,7 +283,7 @@ class APP(object):
         return genesis_path
 
     def restart_rpc(self):
-        self.echo_progress("Restarting of Playchain RPC")
+        self.echo_progress("Restarting of PlayChain RPC")
         total_blocks = self.get_total_blocks()
         pid = os.fork()
         if pid == 0:
@@ -306,7 +306,7 @@ class APP(object):
                 break
                 
     def start_payload(self):
-        self.echo_progress("Starting of Playchain Poker Room couple")
+        self.echo_progress("Starting of PlayChain Poker Room couple")
         total_blocks = self.get_total_blocks()
         pid = os.fork()
         if pid == 0:
@@ -338,7 +338,7 @@ class APP(object):
         time.sleep(15)
 
         if total_blocks <= self.get_total_blocks(True):
-            self.echo_ok("Playchain database synchronized")
+            self.echo_ok("PlayChain database synchronized")
         else:
             self.echo_error("Need in synchronization. Restart in config-mode to synchronization RPC")
             sys.exit(1)
@@ -352,21 +352,21 @@ class APP(object):
     def welcome(self):
         if not self.get_bool_environ('CONFIG_OFF_LOGO'):
             logo = """
- _    _      _                            _         ______ _                  _           _       
-| |  | |    | |                          | |        | ___ \ |                | |         (_)      
-| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | |_/ / | __ _ _   _  ___| |__   __ _ _ _ __  
-| |/\| |/ _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |  __/| |/ _` | | | |/ __| '_ \ / _` | | '_ \ 
-\  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |   | | (_| | |_| | (__| | | | (_| | | | | |
- \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  \_|   |_|\__,_|\__, |\___|_| |_|\__,_|_|_| |_|
-                                                                    __/ |                         
-                                                                   |___/                          
- _____     _        _  ______     _                ___ ___ ___ ___ ___ ___ ___ ___ ___ ___        
-|_   _|   | |      | | | ___ \   | |              |  _|_  |  _|_  |  _|_  |  _|_  |  _|_  |       
-  | | ___ | |_ __ _| | | |_/ /__ | | _____ _ __   | |   | | |   | | |   | | |   | | |   | |       
-  | |/ _ \| __/ _` | | |  __/ _ \| |/ / _ \ '__|  | |   | | |   | | |   | | |   | | |   | |       
-  | | (_) | || (_| | | | | | (_) |   <  __/ |     | |   | | |   | | |   | | |   | | |   | |       
-  \_/\___/ \__\__,_|_| \_|  \___/|_|\_\___|_|     | |_ _| | |_ _| | |_ _| | |_ _| | |_ _| |       
-                                                  |___|___|___|___|___|___|___|___|___|___|       
+ _    _      _                            _         ______ _             _____ _           _       
+| |  | |    | |                          | |        | ___ \ |           /  __ \ |         (_)      
+| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | |_/ / | __ _ _   _| /  \/ |__   __ _ _ _ __  
+| |/\| |/ _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  |  __/| |/ _` | | | | |   | '_ \ / _` | | '_ \ 
+\  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |   | | (_| | |_| | \__/\ | | | (_| | | | | |
+ \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  \_|   |_|\__,_|\__, |\____/_| |_|\__,_|_|_| |_|
+                                                                    __/ |                          
+                                                                   |___/                           
+ _____     _        _  ______     _                ___ ___ ___ ___ ___ ___ ___ ___ ___ ___         
+|_   _|   | |      | | | ___ \   | |              |  _|_  |  _|_  |  _|_  |  _|_  |  _|_  |        
+  | | ___ | |_ __ _| | | |_/ /__ | | _____ _ __   | |   | | |   | | |   | | |   | | |   | |        
+  | |/ _ \| __/ _` | | |  __/ _ \| |/ / _ \ '__|  | |   | | |   | | |   | | |   | | |   | |        
+  | | (_) | || (_| | | | | | (_) |   <  __/ |     | |   | | |   | | |   | | |   | | |   | |        
+  \_/\___/ \__\__,_|_| \_|  \___/|_|\_\___|_|     | |_ _| | |_ _| | |_ _| | |_ _| | |_ _| |        
+                                                  |___|___|___|___|___|___|___|___|___|___|        
                                                                                                   
         """
             for row in logo.split("\n"):
@@ -376,22 +376,22 @@ class APP(object):
     
     def enter_external_playchain_api(self):
         if self.CHAIN_ID:
-            self.echo_progress("Connecting to Playchain database API with ID:\n  {}".format(self.CHAIN_ID))
+            self.echo_progress("Connecting to PlayChain database API with ID:\n  {}".format(self.CHAIN_ID))
         else:
-            self.echo_progress("Connecting to Playchain database API")
+            self.echo_progress("Connecting to PlayChain database API")
         base_url = self.EXTERNAL_PLAYCHAIN_DATABASE_API_URL
         while(True):
-            self.EXTERNAL_PLAYCHAIN_DATABASE_API_URL = click.prompt('Please enter Playchain database API URL', 
+            self.EXTERNAL_PLAYCHAIN_DATABASE_API_URL = click.prompt('Please enter PlayChain database API URL', 
                                                                    type=str, default=base_url)
             chain_id = self.get_chain_id()
             if not chain_id or self.CHAIN_ID and chain_id != self.CHAIN_ID:
                 if chain_id and self.CHAIN_ID and chain_id != self.CHAIN_ID:
-                    self.echo_warning("Different playchain ID '{}' received".format(chain_id))
-                self.abort_if_no("Wrong external playchain. Do you want to set other URL?", fg='yellow')
+                    self.echo_warning("Different PlayChain ID '{}' received".format(chain_id))
+                self.abort_if_no("Wrong external PlayChain. Do you want to set other URL?", fg='yellow')
             else:
                 self.CHAIN_ID = chain_id
                 break
-        self.echo_ok("Playchain database '{}' API found".format(self.CHAIN_ID))
+        self.echo_ok("PlayChain database '{}' API found".format(self.CHAIN_ID))
         
     def check_tcp_port(self, url: str):
         pos = url.rfind(':')
@@ -425,14 +425,14 @@ class APP(object):
     def enter_external_playchain_p2p(self):
         base_url = self.EXTERNAL_PLAYCHAIN_DATABASE_P2P_URL
         while(True):
-            self.EXTERNAL_PLAYCHAIN_DATABASE_P2P_URL = click.prompt('Please enter Playchain database P2P URL', type=str, 
+            self.EXTERNAL_PLAYCHAIN_DATABASE_P2P_URL = click.prompt('Please enter PlayChain database P2P URL', type=str, 
                                                                    default=base_url)
             if not self.check_tcp_port(self.EXTERNAL_PLAYCHAIN_DATABASE_P2P_URL):
                 self.echo_error("'{}' is unreachable".format(self.EXTERNAL_PLAYCHAIN_DATABASE_P2P_URL))
-                self.abort_if_no("Wrong external playchain. Do you want to set other URL?", fg='yellow')
+                self.abort_if_no("Wrong external PlayChain. Do you want to set other URL?", fg='yellow')
             else:
                 break
-        self.echo_ok("Playchain database P2P found")
+        self.echo_ok("PlayChain database P2P found")
     
     def create_rpc_config(self):
         self.echo_progress("Creation of RPC config file")
@@ -477,7 +477,7 @@ class APP(object):
     def synchronize_rpc(self):
         self.create_rpc_config()
         
-        self.echo_progress("Starting Playchain database synchronization")
+        self.echo_progress("Starting PlayChain database synchronization")
         
         args = [p.join(self.BIN_PATH, "playchaind")]
         args.append("-x")
@@ -493,7 +493,7 @@ class APP(object):
         total_blocks = self.get_total_blocks()
         
         self.echo_debug("Waiting synchronization till block {}".format(total_blocks))
-        self.echo_ok("Synchronization of Playchain database")
+        self.echo_ok("Synchronization of PlayChain database")
         with click.progressbar(length=total_blocks, width=self.PROGRESSBAR_BAR_WIDTH,
                            label=self.PROGRESSBAR_TEXT) as bar:
             bar.pos = 0
@@ -529,7 +529,7 @@ class APP(object):
             time.sleep(6)
             synch_blocks = self.get_total_blocks(True)
 
-        self.echo_ok("Playchain database synchronization completed")
+        self.echo_ok("PlayChain database synchronization completed")
     
     def get_private_key(self, name: str, psw: str = None, wif: str = None):
         args = [p.join(self.BIN_PATH, "keys_from_login")]
@@ -607,7 +607,7 @@ class APP(object):
         
         self.OWNER_NAME = name
         self.OWNER_WIF = wif_key
-        self.echo_ok("Hellow '{}', let's configure you Playchain Poker Room".format(self.OWNER_NAME))
+        self.echo_ok("Hellow '{}', let's configure you PlayChain Poker Room".format(self.OWNER_NAME))
         
     def choose_or_create_room(self):
         self.ROOM_NAME = self.NEW_ROOM
@@ -806,9 +806,9 @@ class APP(object):
         if any(self.PLAYCHAIN_TABLES):
             self.echo_debug("Loaded tables {}".format(self.get_table_ids_list(self.PLAYCHAIN_TABLES)))
             if cost_balance > 0:
-                self.echo_ok("Playchain poker room '{}' successfully {}.".format(self.ROOM_NAME, TXT_VERB_P))
+                self.echo_ok("PlayChain poker room '{}' successfully {}.".format(self.ROOM_NAME, TXT_VERB_P))
             else:
-                self.echo_ok("Playchain poker room '{}' successfully loaded.".format(self.ROOM_NAME))
+                self.echo_ok("PlayChain poker room '{}' successfully loaded.".format(self.ROOM_NAME))
         else:
             self.echo_error("Can't {} poker room".format(TXT_VERB))
             sys.exit(1)
@@ -873,7 +873,7 @@ def main():
         app.echo_ok("Configuration is completed. Need restart to leave interactive mode")
     else:
         if not app.check_config():
-            self.echo_error("Playchain poker node is not configured.\n" +
+            self.echo_error("PlayChain poker node is not configured.\n" +
                             "Reload node to interactive mode and setup")
             sys.exit(1)        
         app.start_payload()

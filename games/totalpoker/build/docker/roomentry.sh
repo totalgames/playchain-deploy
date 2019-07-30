@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $CONFIG_DEBUG = ON ]; then
+if [[ -n "${CONFIG_DEBUG}" && ${CONFIG_DEBUG} = ON ]]; then
     echo ">> * ROOMENTRY.SH"
     echo '>> HOME = '$HOME
     echo '>> USER = '$USER
